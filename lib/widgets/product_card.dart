@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import '../models/favorites_manager.dart';
 import '../screens/product_details_screen.dart';
 
 
@@ -27,15 +28,36 @@ class ProductCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Imagem do produto
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.asset(
-              product.imageUrl,
-              height: 120,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
+          // Imagem do produto com icone de favorito
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                child: Image.asset(
+                  product.imageUrl,
+                  height: 120,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: AnimatedBuilder(
+                  animation: favoritesManager,
+                  builder: (context, _) {
+                    final isFav = favoritesManager.isFavorite(product);
+                    return GestureDetector(
+                      onTap: () => favoritesManager.toggleFavorite(product),
+                      child: Icon(
+                        isFav ? Icons.favorite : Icons.favorite_border,
+                        color: Colors.deepPurple,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
           // Detalhes do produto
           Padding(

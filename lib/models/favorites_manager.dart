@@ -18,6 +18,11 @@ class FavoritesManager extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void clearFavorites() {
+    _favorites.clear();
+    notifyListeners();
+  }
 }
 
 final FavoritesManager favoritesManager = FavoritesManager();

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../models/favorites_manager.dart';
+import '../models/user_account_manager.dart';
 import '../screens/product_details_screen.dart';
+import '../screens/minha_conta_page.dart';
 
 
 class ProductCard extends StatelessWidget {
@@ -48,7 +50,20 @@ class ProductCard extends StatelessWidget {
                   builder: (context, _) {
                     final isFav = favoritesManager.isFavorite(product);
                     return GestureDetector(
-                      onTap: () => favoritesManager.toggleFavorite(product),
+                      onTap: () {
+                        if (userAccountManager.hasAccount) {
+                          favoritesManager.toggleFavorite(product);
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const MinhaContaPage(
+                                showFormInitially: true,
+                              ),
+                            ),
+                          );
+                        }
+                      },
                       child: Icon(
                         isFav ? Icons.favorite : Icons.favorite_border,
                         color: Colors.deepPurple,
